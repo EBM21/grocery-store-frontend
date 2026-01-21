@@ -37,7 +37,7 @@ export default function Navbar() {
     };
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:5000/categories");
+        const res = await fetch("https://grocery-store-backend-wxpw.onrender.com/categories");
         const data = await res.json();
         setCategories(data);
       } catch (error) { console.error(error); }
