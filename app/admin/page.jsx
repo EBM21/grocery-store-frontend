@@ -49,11 +49,11 @@ export default function AdminPage() {
   const fetchData = async () => {
     try {
         const [resProd, resCat, resSlide, resOrder, resPromo] = await Promise.all([
-            fetch("http://localhost:5000/products"),
-            fetch("http://localhost:5000/categories"),
-            fetch("http://localhost:5000/sliders"),
-            fetch("http://localhost:5000/orders"),
-            fetch("http://localhost:5000/promo") // Fetch Promo Settings
+            fetch("https://grocery-store-backend-wxpw.onrender.com/products"),
+            fetch("https://grocery-store-backend-wxpw.onrender.com/categories"),
+            fetch("https://grocery-store-backend-wxpw.onrender.com/sliders"),
+            fetch("https://grocery-store-backend-wxpw.onrender.com/orders"),
+            fetch("https://grocery-store-backend-wxpw.onrender.com/promo") // Fetch Promo Settings
         ]);
 
         const dataCat = await resCat.json();
@@ -87,7 +87,7 @@ export default function AdminPage() {
   const handlePromoUpdate = async (e) => {
     e.preventDefault();
     try {
-        await fetch("http://localhost:5000/promo", {
+        await fetch("https://grocery-store-backend-wxpw.onrender.com/promo", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(promoData)
@@ -98,7 +98,7 @@ export default function AdminPage() {
 
   const handleOrderStatus = async (id, newStatus) => {
     try {
-        await fetch(`http://localhost:5000/orders/${id}/status`, {
+        await fetch(`https://grocery-store-backend-wxpw.onrender.com/orders/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
@@ -109,7 +109,7 @@ export default function AdminPage() {
 
   const handleDeleteOrder = async (id) => {
     if(confirm("Permanently delete this order?")) {
-        await fetch(`http://localhost:5000/orders/${id}`, { method: "DELETE" });
+        await fetch(`https://grocery-store-backend-wxpw.onrender.com/orders/${id}`, { method: "DELETE" });
         fetchData();
     }
   };
@@ -118,12 +118,12 @@ export default function AdminPage() {
     e.preventDefault();
     if(!sliderImage) return alert("Select image!");
     const formData = new FormData(); formData.append('image', sliderImage);
-    await fetch("http://localhost:5000/sliders", { method: "POST", body: formData });
+    await fetch("https://grocery-store-backend-wxpw.onrender.com/sliders", { method: "POST", body: formData });
     setSliderImage(null); fetchData();
   };
 
   const handleDeleteSlider = async (id) => {
-    if(confirm("Delete Slider?")) { await fetch(`http://localhost:5000/sliders/${id}`, { method: "DELETE" }); fetchData(); }
+    if(confirm("Delete Slider?")) { await fetch(`https://grocery-store-backend-wxpw.onrender.com/sliders/${id}`, { method: "DELETE" }); fetchData(); }
   };
 
   const handleCategorySubmit = async (e) => {
@@ -132,12 +132,12 @@ export default function AdminPage() {
     formData.append('name', categoryData.name);
     formData.append('discount_percent', categoryData.discount_percent);
     if(categoryImage) formData.append('image', categoryImage);
-    await fetch("http://localhost:5000/categories", { method: "POST", body: formData });
+    await fetch("https://grocery-store-backend-wxpw.onrender.com/categories", { method: "POST", body: formData });
     setCategoryData({ name: "", discount_percent: "0" }); setCategoryImage(null); fetchData();
   };
 
   const handleDeleteCategory = async (id) => {
-    if(confirm("Delete Category?")) { await fetch(`http://localhost:5000/categories/${id}`, { method: "DELETE" }); fetchData(); }
+    if(confirm("Delete Category?")) { await fetch(`https://grocery-store-backend-wxpw.onrender.com/categories/${id}`, { method: "DELETE" }); fetchData(); }
   };
 
   const handleProductSubmit = async (e) => {
@@ -145,7 +145,7 @@ export default function AdminPage() {
     const formData = new FormData();
     Object.keys(productData).forEach(key => formData.append(key, productData[key]));
     if(productImage) formData.append('image', productImage);
-    await fetch("http://localhost:5000/products", { method: "POST", body: formData });
+    await fetch("https://grocery-store-backend-wxpw.onrender.com/products", { method: "POST", body: formData });
     // Reset form including description
     setProductData({ ...productData, title: "", price: "", description: "" }); 
     setProductImage(null); 
@@ -154,7 +154,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteProduct = async (id) => {
-    if(confirm("Delete Product?")) { await fetch(`http://localhost:5000/products/${id}`, { method: "DELETE" }); fetchData(); }
+    if(confirm("Delete Product?")) { await fetch(`https://grocery-store-backend-wxpw.onrender.com/products/${id}`, { method: "DELETE" }); fetchData(); }
   };
 
   const formatItems = (itemsJson) => {

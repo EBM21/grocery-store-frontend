@@ -11,7 +11,7 @@ export default function HeroSlider() {
 
   // Fetch Sliders from Backend
   useEffect(() => {
-    fetch("http://localhost:5000/sliders")
+    fetch("https://grocery-store-backend-wxpw.onrender.com/sliders")
       .then((res) => res.json())
       .then((data) => {
         // Agar data khali hai to default images use karein

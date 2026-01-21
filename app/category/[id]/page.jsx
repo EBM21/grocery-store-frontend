@@ -15,7 +15,7 @@ export default function CategoryPage() {
   const [sortBy, setSortBy] = useState("default");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/products/category/${params.id}`)
+    fetch(`https://grocery-store-backend-wxpw.onrender.com/products/category/${params.id}`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -24,7 +24,7 @@ export default function CategoryPage() {
       })
       .catch((err) => console.error(err));
 
-    fetch("http://localhost:5000/categories")
+    fetch("https://grocery-store-backend-wxpw.onrender.com/categories")
       .then((res) => res.json())
       .then((cats) => {
         const currentCat = cats.find((c) => c.id == params.id);

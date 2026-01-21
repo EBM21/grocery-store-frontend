@@ -8,7 +8,7 @@ export default function TopBar() {
 
   // 1. Fetch Settings
   useEffect(() => {
-    fetch("http://localhost:5000/promo")
+    fetch("https://grocery-store-backend-wxpw.onrender.com/promo")
       .then((res) => res.json())
       .then((data) => setPromo(data))
       .catch((err) => console.error("Promo fetch error", err));

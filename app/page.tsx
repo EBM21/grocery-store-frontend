@@ -32,8 +32,8 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:5000/categories").then((res) => res.json()).then(setCategories).catch(console.log);
-    fetch("http://localhost:5000/products").then((res) => res.json()).then(setProducts).catch(console.log);
+    fetch("https://grocery-store-backend-wxpw.onrender.com/categories").then((res) => res.json()).then(setCategories).catch(console.log);
+    fetch("https://grocery-store-backend-wxpw.onrender.com/products").then((res) => res.json()).then(setProducts).catch(console.log);
   }, []);
 
   // --- FAKE NOTIFICATION LOGIC ---

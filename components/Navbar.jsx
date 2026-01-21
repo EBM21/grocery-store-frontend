@@ -57,7 +57,7 @@ export default function Navbar() {
     const fetchSuggestions = async () => {
       if (searchQuery.trim().length > 1) {
         try {
-          const res = await fetch(`http://localhost:5000/products?search=${searchQuery}`);
+          const res = await fetch(`https://grocery-store-backend-wxpw.onrender.com/products?search=${searchQuery}`);
           const data = await res.json();
           setSearchSuggestions(data.slice(0, 5));
           setShowSuggestions(true);
@@ -137,7 +137,7 @@ export default function Navbar() {
     };
 
     try {
-        const res = await fetch("http://localhost:5000/orders", {
+        const res = await fetch("https://grocery-store-backend-wxpw.onrender.com/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderData)
