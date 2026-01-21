@@ -186,7 +186,7 @@ export default function Home() {
 
       {/* --- WHATSAPP FLOATING BUTTON --- */}
       <a 
-        href="https://wa.me/923001234567" // <-- APNA NUMBER YAHAN DALEIN
+        href="https://wa.me/923171839946" // <-- APNA NUMBER YAHAN DALEIN
         target="_blank" 
         rel="noopener noreferrer"
         className="whatsapp-btn"
