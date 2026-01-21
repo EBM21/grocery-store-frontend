@@ -2,17 +2,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../../components/Navbar";
-import ProductCard from "../../../components/ProductCard";
+import ProductCard, { ProductDetailModal } from "../../../components/ProductCard"; // Modal import kiya
 import FooterPage from "../../../components/Footer";
-import { Grid, List, ChevronDown, Package, X } from "lucide-react";
+import { Package } from "lucide-react";
 
 export default function CategoryPage() {
   const params = useParams();
+  
+  // Data States
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryName, setCategoryName] = useState("Category");
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("default");
+
+  // --- MODAL STATES (NEW) ---
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {
     fetch(`https://grocery-store-backend-wxpw.onrender.com/products/category/${params.id}`)
@@ -57,13 +63,36 @@ export default function CategoryPage() {
 
   const handleAddToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));
+    const updatedCart = [...cart, product];
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
     window.dispatchEvent(new Event('cartUpdated'));
+
+    // Optional: Notification logic (Agar aapne Home page wala notification system yahan lagana ho to)
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+      <div style="position: fixed; top: 80px; right: 20px; background-color: #10b981; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 9999; font-family: Arial; font-weight: 600; animation: slideIn 0.3s ease-out; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">✓</span><span>Added to cart!</span>
+      </div>
+      <style>@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      const notifElement = notification.firstElementChild;
+      if (notifElement) notifElement.style.opacity = '0';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
   };
 
+  // --- CHANGED: AB YE MODAL KHOLEGA ---
   const handleViewDetails = (product) => {
-    window.location.href = `/product/${product.id}`;
+    setSelectedProduct(product);
+    setShowDetailModal(true);
+  };
+
+  // --- NEW: CLOSE MODAL HANDLER ---
+  const handleCloseModal = () => {
+    setShowDetailModal(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -90,7 +119,6 @@ export default function CategoryPage() {
               {loading ? "Loading..." : `${filteredProducts.length} Products`}
             </p>
           </div>
-    
         </div>
 
         {/* Products */}
@@ -122,6 +150,15 @@ export default function CategoryPage() {
           </div>
         )}
       </div>
+
+      {/* --- PRODUCT DETAIL MODAL --- */}
+      {showDetailModal && selectedProduct && (
+        <ProductDetailModal 
+            product={selectedProduct} 
+            onClose={handleCloseModal} 
+            onAddToCart={handleAddToCart} 
+        />
+      )}
       
       <FooterPage />
 
@@ -145,15 +182,6 @@ export default function CategoryPage() {
           .products-grid {
             grid-template-columns: repeat(5, 1fr) !important;
           }
-          .header-top {
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-          }
-          .sort-section {
-            flex-direction: row !important;
-            align-items: center !important;
-          }
         }
         @media (min-width: 1280px) {
           .products-grid {
@@ -164,9 +192,6 @@ export default function CategoryPage() {
         /* Hover Effects */
         a:hover {
           color: #0066CC !important;
-        }
-        .select-box:hover {
-          border-color: #0066CC !important;
         }
         .browse-button:hover {
           background: #0052a3 !important;
@@ -242,44 +267,6 @@ const styles = {
     fontSize: '14px',
     color: '#6b7280',
     margin: 0,
-  },
-  sortSection: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    alignItems: 'flex-start',
-  },
-  sortLabel: {
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#374151',
-  },
-  selectWrapper: {
-    position: 'relative',
-    width: '100%',
-    maxWidth: '280px',
-  },
-  selectBox: {
-    width: '100%',
-    padding: '10px 36px 10px 14px',
-    fontSize: '14px',
-    border: '1px solid #d1d5db',
-    borderRadius: '8px',
-    background: 'white',
-    color: '#374151',
-    fontWeight: '500',
-    cursor: 'pointer',
-    outline: 'none',
-    appearance: 'none',
-    transition: 'border-color 0.2s',
-  },
-  selectIcon: {
-    position: 'absolute',
-    right: '12px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    pointerEvents: 'none',
-    color: '#9ca3af',
   },
   loadingBox: {
     background: 'white',
